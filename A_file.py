@@ -1,3 +1,1 @@
-# this file is uploaded by A
-print("This is master")
-print("This is made by remote user")
+# 11:56 local master
