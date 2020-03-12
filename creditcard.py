@@ -1,7 +1,7 @@
 class CreditCard:
     """A customer credit card."""
     
-    def __init__(self, customer, bank, acnt, limit):
+    def __init__(self, customer, bank, acnt, limit, balance=0):
         """
         Create a new credit card instance.
         
@@ -10,13 +10,14 @@ class CreditCard:
         customer  the name of the customer (eg., 'Tran Quoc Lap')
         bank      the name of the bank (eg., 'VietinBank')
         acnt      the account identifier (eg., '1837 1932 3948 2994')
-        limit     credit limit 
+        limit     credit limit
+        balance   balance of the account (default 0)
         """
         self._customer = customer
         self._bank     = bank
         self._acnt     = acnt
         self._limit    = limit
-        self._balance  = 0
+        self._balance  = balance
     
     def get_customer(self):
         """Return name of the customer."""
