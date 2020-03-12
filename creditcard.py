@@ -44,6 +44,11 @@ class CreditCard:
         
         Return True if charge was processed, False if charge was denied.
         """
+        if not isinstance(price, (int, float)):
+            raise TypeError('price must be numeric')
+        elif price < 0:
+            raise ValueError('price must be positive')
+            
         if price + self._balance > self._limit:
             return False
         else:
@@ -52,6 +57,11 @@ class CreditCard:
             
     def make_payment(self, amount):
         """Process customer payment that reduce balance."""
+        if not isinstance(amount, (int, float)):
+            raise TypeError('payment must be numeric')
+        elif price < 0:
+            raise ValueError('payment must be positive')
+            
         self._balance -= amount
         
         
@@ -80,6 +90,11 @@ class PredatoryCreditCard(CreditCard):
         Return True if charge was processed
         Return False and assess $5 fee if charge is denied.
         """
+        if not isinstance(price, (int, float)):
+            raise TypeError('price must be numeric')
+        elif price < 0:
+            raise ValueError('price must be positive')
+            
         success = super().charge(price)         # call inherited method
         if not success:
             self._balance += 5
