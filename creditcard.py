@@ -39,6 +39,10 @@ class CreditCard:
         """Return current balance."""
         return self._balance
         
+    def _set_balance(self, operation, price):
+        """Affect a change to the balance"""
+        self._balance = eval(str(self._balance) + operation + str(price))
+        
     def charge(self, price):
         """
         Charge given price to the card, assuming sufficient credit limit.
@@ -53,7 +57,7 @@ class CreditCard:
         if price + self._balance > self._limit:
             return False
         else:
-            self._balance += price
+            self._set_balance('+', price)
             return True
             
     def make_payment(self, amount):
@@ -63,7 +67,7 @@ class CreditCard:
         elif price < 0:
             raise ValueError('payment must be positive')
             
-        self._balance -= amount
+        self._set_balance('-', amount)
         
         
 class PredatoryCreditCard(CreditCard):
@@ -83,6 +87,8 @@ class PredatoryCreditCard(CreditCard):
         """
         super().__init__(customer, bank, acnt, limit) # call super constructor
         self._apr = apr
+        self._calls = 0
+        self._payment_of_month = 0
         
     def charge(self, price): # override existing charge method
         """
@@ -91,6 +97,7 @@ class PredatoryCreditCard(CreditCard):
         Return True if charge was processed
         Return False and assess $5 fee if charge is denied.
         """
+        self._calls += 1
         if not isinstance(price, (int, float)):
             raise TypeError('price must be numeric')
         elif price < 0:
@@ -98,14 +105,31 @@ class PredatoryCreditCard(CreditCard):
             
         success = super().charge(price)         # call inherited method
         if not success:
-            self._balance += 5
+            self._set_balance('+', 5)
         return success                          # caller expects return value
         
+    def make_payment(self, amount):
+        """Process customer payment that reduce balance."""
+        super().make_payment(amount)
+        self.payment_of_month += amount
+    
     def process_month(self):
         """Assess monthly interest on outstanding balance."""
+        if self._calls > 10:
+            self._set_balance('+', 1)
+            print("You charge more than 10 times.")
+        
+        minimum_payment = self._balance / 10
+        if self._payment_of_month < minimum_payment:
+            self._set_balance('+', 2)
+            print("You haven't paid enough this month.")
+        
         if self._balance > 0:
             monthly_factor = pow(1 + self._apr, 1/12)
-            self._balance *= monthly_factor
+            self._set_balance('*', monthly_factor)
+        
+        self._calls = 0
+        self._payment_of_month = 0
         
     
     
