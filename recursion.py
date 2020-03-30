@@ -37,19 +37,9 @@ def draw_ruler(num_inches, major_length):
         draw_line(major_length, str(j))
         
 
-        
-import os
+     
 
-def disk_usage(path):
-    """Return the cumulative disk space used by a file/folder and any descendents."""
-    total = os.path.getsize(path)
-    if os.path.isdir(path):
-        for filename in os.listdir(path):
-            childpath = os.path.join(path, filename)
-            total += disk_usage(childpath)
-            
-    print("{0:<7}".format(total), path)
-    return total
+
 
 
 
@@ -98,7 +88,17 @@ def power(x, n):
     partial = power(x, n// 2)
     return partial * partial if n % 2 == 0 else x* partial * partial
  
- 
+def power_non_recursive(a, n):
+    """Non-recursive function to compute a^n."""
+    result = 1
+    while n != 0:
+        t = n % 2
+        n = n // 2 
+        if t == 1:
+            result *= a
+        a = a * a
+    return result
+    
 def binary_sum(S, start, stop):
     """Return the sum of S[start:stop]."""
     if start >= stop:
@@ -109,9 +109,70 @@ def binary_sum(S, start, stop):
         mid = (start + stop) // 2
         return binary_sum(S, start, mid) + binary_sum(S, mid, stop)
 
-print(binary_sum([1, 2, 3, 4, 6, 7], 0, 5))
 
 
+def max_recursion_1(S, start, stop):
+    """Return the max element of a slice S[start:stop] in O(n) time."""
+    if start >= stop - 1:
+        return S[start]
+    else:
+        candidate = max_recursion_1(S, start + 1, stop)
+        return S[start] if S[start] >= candidate else candidate
+        
+def max_recursion_2(S, start, stop):
+    """Return the max element of a slice S[start:stop] in O(n) time."""
+    if start >= stop - 1:
+        return S[start]
+    else:
+        mid = (start + stop) // 2
+        candidate_1 = max_recursion_1(S, start, mid)
+        candidate_2 = max_recursion_2(S, mid, stop)
+        return candidate_1 if candidate_1 > candidate_2 else candidate_2
+
+def str_to_int(s, start, stop):
+    """Convert a string of digits into the integer."""
+    if start > stop - 1:
+        return 0
+    else:
+        return str_to_int(s, start, stop - 1) * 10 + ord(s[stop - 1]) - 48
+
+def min_max_1(S, start, stop):
+    """Return a tuple (min, max) of a slice S[start:stop]."""
+    if start == stop - 1:
+        return S[start], S[start]
+    elif start == stop - 2:
+        return S[start], S[stop - 1] if S[start] < S[stop - 1] else S[stop - 1], S[start]
+    else:
+        mid = (start + stop) // 2
+        candidate_1 = min_max_1(S, start, mid)
+        candidate_2 = min_max_1(S, mid, stop)
+        return candidate_1[0] if candidate_1[0] < candidate_2[0] else candidate_2[0], candidate_1[1] if candidate_1[1] > candidate_2[1] else candidate_2[1]
+        
+def min_max_2(S, start, stop):
+    """Return a tuple (min, max) of a slice S[start:stop]."""
+    if start == stop - 2:
+        return S[start], S[stop - 1] if S[start] < S[stop - 1] else S[stop - 1], S[start]
+    else:
+        return 
 
 
+def logarithm(n):
+    """Return the interger part of the base-two logarithm of n."""
+    if n < 2:
+        return 0
+    else:
+        return 1 + logarithm(n / 2)
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
