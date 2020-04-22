@@ -79,13 +79,13 @@ def is_matched_html(raw):
         k = raw.find('>', j + 1)
         if k == -1:
             return False
-        tag = raw[j + 1: k]
+        tag = raw[j + 1: k].strip()
         if not tag.startswith('/'):
             S.push(tag)
         else:
             if S.is_empty():
                 return False
-            if tag[1:] != S.pop():
+            if not S.pop().startswith(tag[1:])):
                 return False
         j = raw.find('<', k + 1)
     return S.is_empty()
