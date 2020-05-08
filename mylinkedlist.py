@@ -53,6 +53,7 @@ class LinkedStack:
             raise Empty
         answer = self._head
         self._head = self._head._next
+        self._size -= 1
         return answer
         
         
